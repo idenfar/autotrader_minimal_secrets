@@ -1,15 +1,18 @@
 name: Run Autotrader Bot
 
 on:
-  schedule:          # every 15 minutes (UTC)
-    - cron:  '*/15 * * * *'
-  workflow_dispatch: # manual run button
+  # every 15 minutes (UTC)
+  schedule:
+    - cron: '*/15 * * * *'
+  # manual “Run workflow” button
+  workflow_dispatch:
 
 jobs:
   bot:
     runs-on: ubuntu-latest
 
-    permissions:        # IMPORTANT: give the token write access
+    # allow the workflow’s GITHUB_TOKEN to push changes
+    permissions:
       contents: write
 
     steps:
@@ -28,17 +31,17 @@ jobs:
 
       - name: Run bot
         env:
-          SEARCH_URL:        ${{ secrets.SEARCH_URL }}
-          GMAIL_USER:        ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASSWORD:${{ secrets.GMAIL_APP_PASSWORD }}
-          TWILIO_SID:        ${{ secrets.TWILIO_SID }}
-          TWILIO_TOKEN:      ${{ secrets.TWILIO_TOKEN }}
-          TWILIO_FROM:       ${{ secrets.TWILIO_FROM }}
-          TWILIO_TO:         ${{ secrets.TWILIO_TO }}
+          SEARCH_URL:         ${{ secrets.SEARCH_URL }}
+          GMAIL_USER:         ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}   # ← fixed
+          TWILIO_SID:         ${{ secrets.TWILIO_SID }}
+          TWILIO_TOKEN:       ${{ secrets.TWILIO_TOKEN }}
+          TWILIO_FROM:        ${{ secrets.TWILIO_FROM }}
+          TWILIO_TO:          ${{ secrets.TWILIO_TO }}
         run: python autotrader_bot.py
 
       - name: Commit & push updates
-        if:   success() && (hashFiles('seen_listings.json') != '' || hashFiles('archives/**') != '')
+        if: success() && (hashFiles('seen_listings.json') != '' || hashFiles('archives/**') != '')
         run: |
           git config user.name  "autotrader-bot"
           git config user.email "actions@github.com"
