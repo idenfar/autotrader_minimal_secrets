@@ -1,11 +1,11 @@
 name: Run Autotrader Bot
 
-on:
-  # every 15 minutes (UTC)
-  schedule:
-    - cron: '*/15 * * * *'
-  # manual “Run workflow” button
-  workflow_dispatch:
+# on:
+#   # every 15 minutes (UTC)
+#   schedule:
+#     - cron: '*/15 * * * *'
+#   # manual “Run workflow” button
+#   workflow_dispatch:
 
 jobs:
   bot:
